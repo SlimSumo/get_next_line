@@ -6,7 +6,7 @@
 /*   By: rbouchar <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 21:19:58 by rbouchar          #+#    #+#             */
-/*   Updated: 2022/11/18 17:06:21 by rbouchar         ###   ########.fr       */
+/*   Updated: 2022/11/21 17:30:35 by rbouchar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	ft_bzero(void *s, size_t n)
 	ptr = s;
 	i = 0;
 	while (i < n)
-		ptr[i++] = 0;
+		ptr[i++] = '\0';
 }
 
 void	*ft_calloc(size_t count, size_t size)
@@ -45,7 +45,7 @@ void	*ft_calloc(size_t count, size_t size)
 	ptr = malloc(count * size);
 	if (ptr == NULL)
 		return (NULL);
-	ft_bzero(ptr, (count * size));
+	ft_bzero(ptr, count);
 	return (ptr);
 }
 
@@ -59,15 +59,17 @@ int	ft_strlen(char *s)
 	return (i);
 }
 
-char	*ft_strjoin(char *line, char *buffer)
+char	*ft_strjoin(char *line, char *buffer, int ret)
 {
 	char	*result;
 	int		i;
 	int		k;
 
+
+	if (!line || !buffer)
+		return (NULL);
 	i = ft_strlen(line);
-	k = ft_strlen(buffer);
-	result = ft_calloc((i + k + 1), sizeof(char));
+	result = ft_calloc((i + ret + 1), sizeof(char));
 	if (!result)
 		return (NULL);
 	i = 0;
@@ -75,8 +77,9 @@ char	*ft_strjoin(char *line, char *buffer)
 	while (line[i] != '\0')
 		result[k++] = line[i++];
 	i = 0;
-	while (buffer[i] != '\0')
-		result[k++] = buffer[i++];
+	if (ret > 0)
+		while (buffer[i] != '\0' && i < ret)
+			result[k++] = buffer[i++];
 	free(line);
 	return (result);
 }
