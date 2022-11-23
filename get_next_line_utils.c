@@ -6,7 +6,7 @@
 /*   By: rbouchar <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/08 21:19:58 by rbouchar          #+#    #+#             */
-/*   Updated: 2022/11/21 17:30:35 by rbouchar         ###   ########.fr       */
+/*   Updated: 2022/11/23 15:43:21 by rbouchar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,6 @@ char	*ft_strjoin(char *line, char *buffer, int ret)
 	char	*result;
 	int		i;
 	int		k;
-
 
 	if (!line || !buffer)
 		return (NULL);

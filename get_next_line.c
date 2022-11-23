@@ -6,7 +6,7 @@
 /*   By: rbouchar <marvin@42lausanne.ch>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/11/07 16:30:56 by rbouchar          #+#    #+#             */
-/*   Updated: 2022/11/21 17:30:31 by rbouchar         ###   ########.fr       */
+/*   Updated: 2022/11/23 15:43:19 by rbouchar         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,13 @@ char	*ft_nextline(char *line, char *result)
 
 	i = 0;
 	if (!result)
-		return(NULL);
+		return (NULL);
 	sizenline = ft_strlen(line) - ft_strlen(result);
 	if (sizenline == 0)
+	{
+		free(line);
 		return (NULL);
+	}
 	nextline = ft_calloc(sizenline + 1, sizeof(char));
 	if (!nextline)
 		return (NULL);
@@ -33,11 +36,11 @@ char	*ft_nextline(char *line, char *result)
 		nextline[i] = line[ft_strlen(result) + i];
 		i++;
 	}
+	free(line);
 	return (nextline);
 }
 
 char	*ft_result(char	*line)
-
 {
 	char	*result;
 	int		i;
@@ -49,7 +52,10 @@ char	*ft_result(char	*line)
 		i++;
 	result = ft_calloc((i + 1), sizeof(char));
 	if (!result)
+	{
+		free(line);
 		return (NULL);
+	}
 	i = 0;
 	while (line[i] != '\n' && line[i] != '\0')
 	{
@@ -69,20 +75,18 @@ char	*ft_read(char *line, int fd)
 	buf = ft_calloc(BUFFER_SIZE + 1, 1);
 	if (!line)
 		line = ft_calloc(1, sizeof(char));
+	if (!line)
+		free(buf);
+	if (!line)
+		return (NULL);
 	ret = 1;
 	while (ret > 0 && ft_strchr(line, 10) == NULL)
 	{
 		ret = read(fd, buf, BUFFER_SIZE);
-		if (ret < 0)
+		if (ret < 0 || (ret == 0 && line[0] == '\0'))
 		{
 			free(buf);
 			free(line);
-			return (NULL);
-		}
-		if (ret == 0 && line[0] == '\0')
-		{
-			free(line);
-			free(buf);
 			return (NULL);
 		}
 		buf[ret] = '\0';
@@ -107,6 +111,12 @@ char	*get_next_line(int fd)
 	if (line == NULL)
 		return (NULL);
 	result = ft_result(line);
+	if (result == NULL)
+	{
+		free(line);
+		line = NULL;
+		return (NULL);
+	}
 	line = ft_nextline(line, result);
 	return (result);
 }
